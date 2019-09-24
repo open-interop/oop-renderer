@@ -12,7 +12,8 @@
     "dotenv": "^8.0.0",
     "isolated-vm": "^2.0.1",
     "mustache": "^3.0.2",
-    "oop-node-common": "https://github.com/open-interop/oop-node-common#develop"
+    "oop-node-common": "https://github.com/open-interop/oop-node-common#develop",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.1.0",
