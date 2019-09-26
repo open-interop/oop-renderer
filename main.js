@@ -9,7 +9,7 @@ module.exports = async (broker, config, logger) => {
 
         logger.info(`Rendering ${data.uuid}.`);
 
-        data.transmissionUuid = uuid();
+        data.transmissionId = uuid();
 
         try {
             var rendered = await renderer(data, data.tempr.template);
@@ -21,7 +21,7 @@ module.exports = async (broker, config, logger) => {
                 messageId: data.uuid,
                 deviceId: data.device.id,
                 deviceTemprId: data.tempr.deviceTemprId,
-                transmissionUuid: data.transmissionUuid,
+                transmissionId: data.transmissionId,
                 error: `Unable to render tempr: '${e}'.`,
             };
 
