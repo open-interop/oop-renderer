@@ -5,31 +5,29 @@ var main = require("./main");
 test("discard transmission", t => {
     t.plan(1);
 
-    let published = [];
+    const published = [];
 
     return new Promise(resolve => {
-        let broker = {
+        const broker = {
             consume: (queue, fn) => {
-                return fn(
-                    {
-                        content: {
-                            uuid: "1234-123456-1234-1234",
-                            tempr: {
-                                template: {
-                                    language: "js",
-                                    script: "DiscardTransmission();"
-                                }
+                return fn({
+                    content: {
+                        uuid: "1234-123456-1234-1234",
+                        tempr: {
+                            template: {
+                                language: "js",
+                                script: "DiscardTransmission();"
                             }
                         }
                     }
-                ).then(resolve);
+                }).then(resolve);
             },
             publish: (exchange, queue, message) => {
                 published.push(message);
             }
         };
 
-        main(broker, {}, console)
+        main(broker, {}, console);
     }).then(() => {
         t.deepEqual([], published);
     });
