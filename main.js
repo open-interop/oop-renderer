@@ -15,7 +15,9 @@ module.exports = (broker, config, logger) => {
             var rendered = await renderer(data, data.tempr.template);
         } catch (e) {
             if (e.discard === true) {
-                logger.info(`Transmission from ${data.uuid} discarded in renderer.`);
+                logger.info(
+                    `Transmission from ${data.uuid} discarded in renderer.`
+                );
 
                 return;
             }
@@ -28,7 +30,7 @@ module.exports = (broker, config, logger) => {
                 deviceId: data.device.id,
                 deviceTemprId: data.tempr.deviceTemprId,
                 transmissionId: data.transmissionId,
-                error: `Unable to render tempr: '${e}'.`,
+                error: `Unable to render tempr: '${e}'.`
             };
 
             broker.publish(
