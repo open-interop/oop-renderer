@@ -59,6 +59,6 @@ test("transmission works", t => {
 
         main(broker, {}, console);
     }).then(() => {
-        t.is(published[0].rendered.val, "test");
+        t.is(published[0].tempr.rendered.val, "test");
     });
 });
