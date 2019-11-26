@@ -42,7 +42,7 @@ module.exports = (broker, config, logger) => {
             return;
         }
 
-        data.rendered = rendered;
+        data.tempr.rendered = rendered;
 
         broker.publish(
             config.endpointsExchangeName,
