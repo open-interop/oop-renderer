@@ -13,41 +13,52 @@ module.exports = (broker, config, logger) => {
 
         try {
             var rendered = await renderer(data, data.tempr.template);
+
+            data.tempr.rendered = rendered;
+
+            broker.publish(
+                config.endpointsExchangeName,
+                `${config.oopEndpointsQ}.${data.tempr.endpointType}`,
+                data
+            );
         } catch (e) {
+            let responseData;
+
             if (e.discard === true) {
                 logger.info(
                     `Transmission from ${data.uuid} discarded in renderer.`
                 );
 
-                return;
-            }
+                responseData = {
+                    success: true,
+                    status: null,
+                    discarded: true,
+                    datetime: new Date(),
+                    messageId: data.uuid,
+                    deviceId: data.device.id,
+                    deviceTemprId: data.tempr.deviceTemprId,
+                    transmissionId: data.transmissionId
+                };
+            } else {
+                logger.error(`Transmission from ${data.uuid} failed.`);
 
-            const responseData = {
-                success: false,
-                status: null,
-                datetime: new Date(),
-                messageId: data.uuid,
-                deviceId: data.device.id,
-                deviceTemprId: data.tempr.deviceTemprId,
-                transmissionId: data.transmissionId,
-                error: `Unable to render tempr: '${e}'.`
-            };
+                responseData = {
+                    success: false,
+                    status: null,
+                    datetime: new Date(),
+                    messageId: data.uuid,
+                    deviceId: data.device.id,
+                    deviceTemprId: data.tempr.deviceTemprId,
+                    transmissionId: data.transmissionId,
+                    error: `Unable to render tempr: '${e}'.`
+                };
+            }
 
             broker.publish(
                 config.exchangeName,
                 config.coreResponseQ,
                 responseData
             );
-
-            return;
         }
-
-        data.tempr.rendered = rendered;
-
-        broker.publish(
-            config.endpointsExchangeName,
-            `${config.oopEndpointsQ}.${data.tempr.endpointType}`,
-            data
-        );
     });
 };

@@ -2,8 +2,10 @@ import test from "ava";
 
 var main = require("./main");
 
+const mockLogger = { info: () => {}, error: () => {} };
+
 test("discard transmission", t => {
-    t.plan(1);
+    t.plan(2);
 
     const published = [];
 
@@ -18,6 +20,9 @@ test("discard transmission", t => {
                                 language: "js",
                                 script: "DiscardTransmission();"
                             }
+                        },
+                        device: {
+                            id: 1
                         }
                     }
                 }).then(resolve);
@@ -27,14 +32,15 @@ test("discard transmission", t => {
             }
         };
 
-        main(broker, {}, console);
+        main(broker, {}, mockLogger);
     }).then(() => {
-        t.deepEqual([], published);
+        t.is(published.length, 1);
+        t.deepEqual(published[0].discarded, true);
     });
 });
 
 test("transmission works", t => {
-    t.plan(1);
+    t.plan(2);
 
     const published = [];
 
@@ -57,8 +63,9 @@ test("transmission works", t => {
             }
         };
 
-        main(broker, {}, console);
+        main(broker, {}, mockLogger);
     }).then(() => {
+        t.is(published.length, 1);
         t.is(published[0].tempr.rendered.val, "test");
     });
 });
