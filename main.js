@@ -30,35 +30,24 @@ module.exports = (broker, config, logger) => {
                 );
 
                 responseData = {
-                    success: true,
-                    status: null,
                     discarded: true,
-                    datetime: new Date(),
-                    messageId: data.uuid,
-                    deviceId: data.device.id,
-                    deviceTemprId: data.tempr.deviceTemprId,
-                    transmissionId: data.transmissionId
+                    success: false,
+                    datetime: new Date()
                 };
             } else {
                 logger.error(`Transmission from ${data.uuid} failed.`);
 
                 responseData = {
-                    success: false,
-                    status: null,
                     datetime: new Date(),
-                    messageId: data.uuid,
-                    deviceId: data.device.id,
-                    deviceTemprId: data.tempr.deviceTemprId,
-                    transmissionId: data.transmissionId,
+                    discarded: false,
+                    success: false,
                     error: `Unable to render tempr: '${e}'.`
                 };
             }
 
-            broker.publish(
-                config.exchangeName,
-                config.coreResponseQ,
-                responseData
-            );
+            data.response = responseData;
+
+            broker.publish(config.exchangeName, config.coreResponseQ, data);
         }
     });
 };
