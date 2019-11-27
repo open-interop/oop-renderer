@@ -85,7 +85,7 @@ test("console log works", t => {
                             template: {
                                 val: {
                                     script: "console.log('foo');",
-                                    language: "js",
+                                    language: "js"
                                 }
                             }
                         }

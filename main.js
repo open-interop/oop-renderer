@@ -13,7 +13,7 @@ module.exports = (broker, config, logger) => {
 
         try {
             let output = "";
-            let log = msg => {
+            const log = msg => {
                 output += msg;
             };
 
