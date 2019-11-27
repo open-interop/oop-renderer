@@ -35,7 +35,7 @@ test("discard transmission", t => {
         main(broker, {}, mockLogger);
     }).then(() => {
         t.is(published.length, 1);
-        t.deepEqual(published[0].discarded, true);
+        t.deepEqual(published[0].response.discarded, true);
     });
 });
 
