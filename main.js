@@ -12,9 +12,15 @@ module.exports = (broker, config, logger) => {
         data.transmissionId = uuid();
 
         try {
-            var rendered = await renderer(data, data.tempr.template);
+            let output = "";
+            const log = msg => {
+                output += msg;
+            };
+
+            var rendered = await renderer(data, data.tempr.template, log);
 
             data.tempr.rendered = rendered;
+            data.tempr.console = output;
 
             broker.publish(
                 config.endpointsExchangeName,
