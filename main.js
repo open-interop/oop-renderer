@@ -51,7 +51,7 @@ module.exports = (broker, config, logger) => {
                 };
             }
 
-            data.response = responseData;
+            data.tempr.response = responseData;
 
             broker.publish(config.exchangeName, config.coreResponseQ, data);
         }
