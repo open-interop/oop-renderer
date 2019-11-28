@@ -1,18 +1,20 @@
 {
   "name": "oop-renderer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Renderer service for OpenInterop",
   "main": "app.js",
   "license": "AGPL-3.0",
   "scripts": {
-    "test": "ava",
-    "lint": "eslint --fix ./**/*.js"
+    "start": "node app",
+    "test": "nyc ava",
+    "lint": "eslint --fix ./**/*.js",
+    "test-lint": "eslint ./*.js ./lib/*.js"
   },
   "dependencies": {
-    "dotenv": "^8.0.0",
     "isolated-vm": "^2.0.1",
     "mustache": "^3.0.2",
-    "oop-node-common": "https://github.com/open-interop/oop-node-common#develop"
+    "oop-node-common": "https://github.com/open-interop/oop-node-common#develop",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.1.0",
@@ -29,6 +31,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-standard": "^1.0.2",
     "husky": "^3.0.2",
+    "nyc": "^14.1.1",
     "prettier": "^1.18.2"
   },
   "husky": {

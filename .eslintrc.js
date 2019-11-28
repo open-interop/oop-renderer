@@ -16,7 +16,6 @@ module.exports = {
         indent: ["error", 4, {"SwitchCase": 1}],
         curly: ["error", "all"],
         "prettier/prettier": "error",
-        "linebreak-style": ["error", "windows"],
         "new-cap": ["error", { "newIsCapExceptionPattern": "^winston\.." }]
     }
 };
