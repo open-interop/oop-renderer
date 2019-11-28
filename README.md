@@ -34,6 +34,12 @@ Discarded transmissions will still be reported to core.
 
 #### Fields the tempr has access to
 
+The object below is an example of what renderers have access to.
+
+When using the mustache rendering engine, values can accessed via their dot separated path, e.g: `{{{message.body}}}`.
+
+For the javascript rendering engine, this object is made available in the `message` variable, so to gain access to the body `message.message.body`.
+
 ```javascript
 {
     uuid: 'add28426-8839-4c41-b0fa-91b5d0720caa',
