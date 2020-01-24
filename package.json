@@ -1,6 +1,6 @@
 {
   "name": "oop-renderer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Renderer service for OpenInterop",
   "main": "app.js",
   "license": "AGPL-3.0",
@@ -13,7 +13,7 @@
   "dependencies": {
     "isolated-vm": "^2.0.1",
     "mustache": "^3.0.2",
-    "oop-node-common": "https://github.com/open-interop/oop-node-common#develop",
+    "oop-node-common": "^1.0.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
