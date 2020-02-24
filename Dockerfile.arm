@@ -1,0 +1,17 @@
+FROM arm32v7/node:12.16.1
+
+LABEL maintainer="daniel.young@bluefrontier.co.uk"
+
+COPY --from=resin/armhf-alpine:3.5 /usr/bin/qemu-arm-static /usr/bin/qemu-arm-static
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+RUN npm install -g yarn --force
+
+RUN yarn
+
+COPY . .
+
+CMD ["yarn", "start"]

@@ -1,8 +1,11 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
-version: 2
+version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: openinterop/oop-renderer-arm
+    docker:
+      - image: circleci/buildpack-deps:stretch
+
 jobs:
   build:
     docker:
@@ -36,3 +39,46 @@ jobs:
       # run tests!
       - run: yarn test
       - run: yarn run test-lint
+
+  build-image:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            docker run --rm --privileged multiarch/qemu-user-static:register --reset
+            docker build -f Dockerfile.arm -t $IMAGE_NAME:latest .
+      - run:
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  publish-latest:
+    executor: docker-publisher
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:latest
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - build
+      - build-image:
+          requires:
+            - build
+      - publish-latest:
+          requires:
+            - build-image
