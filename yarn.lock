@@ -2618,9 +2618,9 @@ isobject@^4.0.0:
   integrity sha512-S/2fF5wH8SJA/kmwr6HYhK/RI/OkhD84k8ntalo0iJjZikgq1XFvR5M8NPT1x5F7fBwCG3qHfnzeP/Vh/ZxCUA==
 
 isolated-vm@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/isolated-vm/-/isolated-vm-2.0.1.tgz#dee5a652539c02996b876788b73ca94c63dd27fd"
-  integrity sha512-RTvRsenkiUrvdVYRtNBae7MjqAbYnmSLeBR261KHkD4Dunpi9+HTwKuH3HJm68MrzAOgboErbUuWTcDnRHf13w==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/isolated-vm/-/isolated-vm-2.1.0.tgz#4133977b72eab23d37669fe28cdaa979db1a17b6"
+  integrity sha512-MkmC8cUVozjdGviqFTGEDRFHTMXHSlPKrZizE3L8D1VZ5Cz8/dSfgKkwDY/IJAkmoedS2v7OK1936gMvQ3gBJA==
 
 istanbul-lib-coverage@^2.0.5:
   version "2.0.5"
