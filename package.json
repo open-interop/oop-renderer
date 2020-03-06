@@ -13,7 +13,7 @@
   "dependencies": {
     "isolated-vm": "^2.0.1",
     "mustache": "^3.0.2",
-    "oop-node-common": "1.0.3",
+    "oop-node-common": "1.0.4",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
