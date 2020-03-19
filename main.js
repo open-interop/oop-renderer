@@ -42,7 +42,7 @@ module.exports = (broker, config, logger) => {
 
                 responseData = {
                     discarded: true,
-                    success: false,
+                    success: true,
                     datetime: new Date()
                 };
             } else {
