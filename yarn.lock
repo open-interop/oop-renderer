@@ -584,9 +584,9 @@ acorn-jsx@^5.0.0, acorn-jsx@^5.1.0:
   integrity sha512-tMUqwBWfLFbJbizRmEcWSLw6HnFzfdJs2sOJEOwwtVPMoH/0Ay+E703oZz78VSXZiiDcZrQ5XKjPIUQixhmgVw==
 
 acorn@^6.0.7:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.3.0.tgz#0087509119ffa4fc0a0041d1e93a417e68cb856e"
-  integrity sha512-/czfa8BwS88b9gWQVhc8eknunSA2DoJpJyTQkhheIf5E48u1N0R4q/YxxsAeqRrmK9TQ/uYfgLDfZo91UlANIA==
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
+  integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
 
 acorn@^7.1.0:
   version "7.1.0"
@@ -3261,10 +3261,10 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-oop-node-common@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/oop-node-common/-/oop-node-common-1.0.4.tgz#f0472da1d848d0c31d0a7879fe441c0d973f9cae"
-  integrity sha512-XxU4R0WSHKk/1TSg72DgrGJei5TsBopWI8R+Cu0PFp+StxUdRyKqLLPdYsRx226R+nM1dq45prcmwBFIngsM4w==
+oop-node-common@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/oop-node-common/-/oop-node-common-1.0.5.tgz#7bea06afe45023057dc9aaf05d61ff0de1804d06"
+  integrity sha512-e5p0eEiTd5U9ELS1XniUUoUeVZJSmogXT4QSB4N+LR4iwergyWLUX0vW1n5leAG32BtOIDvMXk8/lr9IXfFOyA==
   dependencies:
     amqplib "^0.5.5"
     dotenv "^8.1.0"

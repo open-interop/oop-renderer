@@ -17,7 +17,12 @@ module.exports = (broker, config, logger) => {
                 output += msg;
             };
 
-            var rendered = await renderer(data, data.tempr.template, log);
+            var rendered = await renderer(
+                data,
+                data.tempr.template,
+                data.layers,
+                log
+            );
 
             data.tempr.rendered = rendered;
             data.tempr.console = output;
@@ -37,7 +42,7 @@ module.exports = (broker, config, logger) => {
 
                 responseData = {
                     discarded: true,
-                    success: false,
+                    success: true,
                     datetime: new Date()
                 };
             } else {
