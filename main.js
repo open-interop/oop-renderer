@@ -47,6 +47,7 @@ module.exports = (broker, config, logger) => {
                 };
             } else {
                 logger.error(`Transmission from ${data.uuid} failed.`);
+                logger.error(`Error message: ${e}`);
 
                 responseData = {
                     datetime: new Date(),
