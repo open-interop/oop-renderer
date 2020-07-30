@@ -10,9 +10,9 @@ module.exports = (broker, config, logger) => {
         logger.info(`Rendering ${data.uuid}.`);
 
         data.transmissionId = uuid();
+        let output = "";
 
         try {
-            let output = "";
             const log = msg => {
                 output += msg;
             };
@@ -26,6 +26,7 @@ module.exports = (broker, config, logger) => {
 
             data.tempr.rendered = rendered;
             data.tempr.console = output;
+            data.tempr.error = null;
 
             broker.publish(
                 config.endpointsExchangeName,
@@ -58,6 +59,9 @@ module.exports = (broker, config, logger) => {
             }
 
             data.tempr.response = responseData;
+            data.tempr.rendered = null;
+            data.tempr.console = output;
+            data.tempr.error = String(e);
 
             broker.publish(config.exchangeName, config.coreResponseQ, data);
         }
