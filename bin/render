@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+const fs = require("fs");
+
+const getArgs = () => {
+    const argv = [ ...process.argv ];
+    const node = argv.shift();
+    const me = argv.shift();
+
+    if (argv.length < 2) {
+        console.error(
+            "Please provide an exmaple message and a render script.\n" +
+            `Example usage: ${me} message.json script.js`
+        );
+
+        process.exit(1);
+    }
+
+    const f = (s, l) => (v => v === s || v === l);
+    const mFlag = argv.findIndex(f("-m", "--message"));
+    const sFlag = argv.findIndex(f("-s", "--script"));
+
+    if (mFlag > -1 || sFlag > -1) {
+        if (!(mFlag > -1 && sFlag > -1)) {
+            console.error(
+                "Please provide an exmaple message and a render script.\n" +
+                `Example usage: ${me} -m message.json -s script.js` + "\n" +
+                `Example usage: ${me} --message message.json --script script.js`
+            );
+
+            process.exit(1);
+        }
+
+        return { messageFile: argv[mFlag + 1], scriptFile: argv[sFlag + 1] };
+    } else {
+        return { messageFile: argv[0], scriptFile: argv[1] };
+    }
+};
+
+const { messageFile, scriptFile } = getArgs();
+const message = fs.readFileSync(messageFile).toString("utf8");
+const script = fs.readFileSync(scriptFile).toString("utf8");
+
+const main = require("../main");
+
+const broker = {
+    consume: (queue, callback) => {
+        callback({
+            content: {
+                uuid: "00000000-0000-0000-0000-000000000000",
+                tempr: {
+                    id: 0,
+                    template: { language: "js", script: script },
+                },
+                message: JSON.parse(message),
+                layers: [],
+            }
+        });
+    },
+    publish: (exchange, queue, message) => {
+        const res = {
+            rendered: message.tempr.rendered,
+            console: message.tempr.console,
+            error: message.tempr.error,
+        };
+
+        console.error(JSON.stringify(res));
+    },
+};
+
+const nop = () => {};
+
+main(broker, {}, { info: nop, warn: nop, error: nop });
