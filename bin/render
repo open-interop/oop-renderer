@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const fs = require("fs");
+const path = require("path");
 
 const getArgs = () => {
     const argv = [ ...process.argv ];
@@ -18,8 +19,16 @@ const getArgs = () => {
     const f = (s, l) => (v => v === s || v === l);
     const mFlag = argv.findIndex(f("-m", "--message"));
     const sFlag = argv.findIndex(f("-s", "--script"));
+    const lFlags = argv.reduce((acc, val, index) => {
+        if (f("-l", "--layer")(val)) {
+            return [ ...acc, index ];
+        }
 
-    if (mFlag > -1 || sFlag > -1) {
+        return acc;
+    }, []);
+
+
+    if (mFlag > -1 || sFlag > -1 || lFlags.length) {
         if (!(mFlag > -1 && sFlag > -1)) {
             console.error(
                 "Please provide an exmaple message and a render script.\n" +
@@ -30,15 +39,36 @@ const getArgs = () => {
             process.exit(1);
         }
 
-        return { messageFile: argv[mFlag + 1], scriptFile: argv[sFlag + 1] };
+        const layers = [];
+        if (lFlags.length) {
+            lFlags.forEach(flag => {
+                let index = flag + 1;
+                while (index < argv.length && argv[index][0] !== "-") {
+                    layers.push(argv[index]);
+                    index += 1;
+                }
+            });
+        }
+
+        return { messageFile: argv[mFlag + 1], scriptFile: argv[sFlag + 1], layerFiles: layers };
     } else {
-        return { messageFile: argv[0], scriptFile: argv[1] };
+        return { messageFile: argv[0], scriptFile: argv[1], layerFiles: argv.slice(2) };
     }
 };
 
-const { messageFile, scriptFile } = getArgs();
-const message = fs.readFileSync(messageFile).toString("utf8");
-const script = fs.readFileSync(scriptFile).toString("utf8");
+const getFile = fileName => fs.readFileSync(fileName).toString("utf8");
+
+const { messageFile, scriptFile, layerFiles } = getArgs();
+
+const message = getFile(messageFile);
+const script = getFile(scriptFile);
+const layers = layerFiles.map((fileName, index) => {
+    return {
+        id: index,
+        script: getFile(fileName),
+        reference: path.parse(fileName).name,
+    };
+});
 
 const main = require("../main");
 
@@ -49,10 +79,14 @@ const broker = {
                 uuid: "00000000-0000-0000-0000-000000000000",
                 tempr: {
                     id: 0,
-                    template: { language: "js", script: script },
+                    template: {
+                        language: "js",
+                        script: script,
+                        layers: layers.map((_, index) => index),
+                    },
                 },
                 message: JSON.parse(message),
-                layers: [],
+                layers: layers,
             }
         });
     },
