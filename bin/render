@@ -2,15 +2,40 @@
 const fs = require("fs");
 const path = require("path");
 
-const getArgs = () => {
+const processStdin = () => {
+    var input = '';
+
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+
+    process.stdin.on('data', function (chunk) {
+        input += chunk;
+    });
+
+    return new Promise((resolve, reject) => {
+        process.stdin.on('end', function () {
+            try {
+                resolve(JSON.parse(input));
+            } catch (e) {
+                reject(e);
+            }
+        });
+    });
+};
+
+const processArgs = async () => {
     const argv = [ ...process.argv ];
     const node = argv.shift();
     const me = argv.shift();
 
     if (argv.length < 2) {
+        if (argv.length && argv[0] === "-") {
+            return processStdin();
+        }
+
         console.error(
-            "Please provide an exmaple message and a render script.\n" +
-            `Example usage: ${me} message.json script.js`
+            "Please provide an exmaple message and a render template.\n" +
+            `Example usage: ${me} message.json template.json`
         );
 
         process.exit(1);
@@ -18,7 +43,7 @@ const getArgs = () => {
 
     const f = (s, l) => (v => v === s || v === l);
     const mFlag = argv.findIndex(f("-m", "--message"));
-    const sFlag = argv.findIndex(f("-s", "--script"));
+    const tFlag = argv.findIndex(f("-t", "--template"));
     const lFlags = argv.reduce((acc, val, index) => {
         if (f("-l", "--layer")(val)) {
             return [ ...acc, index ];
@@ -28,12 +53,12 @@ const getArgs = () => {
     }, []);
 
 
-    if (mFlag > -1 || sFlag > -1 || lFlags.length) {
-        if (!(mFlag > -1 && sFlag > -1)) {
+    if (mFlag > -1 || tFlag > -1 || lFlags.length) {
+        if (!(mFlag > -1 && tFlag > -1)) {
             console.error(
-                "Please provide an exmaple message and a render script.\n" +
-                `Example usage: ${me} -m message.json -s script.js` + "\n" +
-                `Example usage: ${me} --message message.json --script script.js`
+                "Please provide an exmaple message and a render template.\n" +
+                `Example usage: ${me} -m message.json -t template.json` + "\n" +
+                `Example usage: ${me} --message message.json --template template.json`
             );
 
             process.exit(1);
@@ -50,57 +75,55 @@ const getArgs = () => {
             });
         }
 
-        return { messageFile: argv[mFlag + 1], scriptFile: argv[sFlag + 1], layerFiles: layers };
+        return getArgFileContents({ messageFile: argv[mFlag + 1], templateFile: argv[tFlag + 1], layerFiles: layers });
     } else {
-        return { messageFile: argv[0], scriptFile: argv[1], layerFiles: argv.slice(2) };
+        return getArgFileContents({ messageFile: argv[0], templateFile: argv[1], layerFiles: argv.slice(2) });
     }
+};
+
+const getArgFileContents = args => {
+    const { messageFile, templateFile, layerFiles } = args;
+
+    const message = JSON.parse(getFile(messageFile));
+    const template = JSON.parse(getFile(templateFile));
+    const layers = layerFiles.map((fileName, index) => {
+        return {
+            id: index,
+            script: getFile(fileName),
+            reference: path.parse(fileName).name,
+        };
+    });
+
+    return { message, template, layers };
 };
 
 const getFile = fileName => fs.readFileSync(fileName).toString("utf8");
 
-const { messageFile, scriptFile, layerFiles } = getArgs();
+const main = async () => {
+    const render = require("../main");
 
-const message = getFile(messageFile);
-const script = getFile(scriptFile);
-const layers = layerFiles.map((fileName, index) => {
-    return {
-        id: index,
-        script: getFile(fileName),
-        reference: path.parse(fileName).name,
+    const { message, template, layers } = await processArgs();
+    const uuid = "00000000-0000-0000-0000-000000000000";
+    const tempr = { id: 0, template };
+
+    const broker = {
+        consume: (queue, callback) => {
+            callback({ content: { uuid, tempr, message, layers, } });
+        },
+        publish: (exchange, queue, message) => {
+            const res = {
+                rendered: message.tempr.rendered,
+                console: message.tempr.console,
+                error: message.tempr.error,
+            };
+
+            console.error(JSON.stringify(res));
+        },
     };
-});
 
-const main = require("../main");
+    const nop = () => {};
 
-const broker = {
-    consume: (queue, callback) => {
-        callback({
-            content: {
-                uuid: "00000000-0000-0000-0000-000000000000",
-                tempr: {
-                    id: 0,
-                    template: {
-                        language: "js",
-                        script: script,
-                        layers: layers.map((_, index) => index),
-                    },
-                },
-                message: JSON.parse(message),
-                layers: layers,
-            }
-        });
-    },
-    publish: (exchange, queue, message) => {
-        const res = {
-            rendered: message.tempr.rendered,
-            console: message.tempr.console,
-            error: message.tempr.error,
-        };
-
-        console.error(JSON.stringify(res));
-    },
+    render(broker, {}, { info: nop, warn: nop, error: nop });
 };
 
-const nop = () => {};
-
-main(broker, {}, { info: nop, warn: nop, error: nop });
+main();
