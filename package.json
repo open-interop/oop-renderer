@@ -1,6 +1,6 @@
 {
   "name": "oop-renderer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Renderer service for OpenInterop",
   "main": "app.js",
   "license": "AGPL-3.0",
@@ -11,7 +11,7 @@
     "test-lint": "eslint ./*.js ./lib/*.js"
   },
   "bin": {
-      "render": "./bin/render"
+    "render": "./bin/render"
   },
   "dependencies": {
     "isolated-vm": "^2.0.1",
