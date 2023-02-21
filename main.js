@@ -24,7 +24,7 @@ module.exports = (broker, config, logger) => {
                 log
             );
 
-            if(rendered.body && rendered.body.customFields){
+            if (rendered.body && rendered.body.customFields) {
                 data.customFields = rendered.body.customFields;
                 delete rendered.body.customFields;
             }
@@ -32,7 +32,7 @@ module.exports = (broker, config, logger) => {
             data.tempr.rendered = rendered;
             data.tempr.console = output;
             data.tempr.error = null;
-        
+
             broker.publish(
                 config.endpointsExchangeName,
                 `${config.oopEndpointsQ}.${data.tempr.endpointType}`,
