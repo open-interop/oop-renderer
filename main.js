@@ -24,7 +24,7 @@ module.exports = (broker, config, logger) => {
                 log
             );
 
-            if(rendered.body.customFields){
+            if(rendered.body && rendered.body.customFields){
                 data.customFields = rendered.body.customFields;
                 delete rendered.body.customFields;
             }
