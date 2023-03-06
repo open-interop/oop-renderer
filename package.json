@@ -14,7 +14,7 @@
     "render": "./bin/render"
   },
   "dependencies": {
-    "isolated-vm": "^4.1.0",
+    "isolated-vm": "^4.4.2",
     "mustache": "^3.0.2",
     "oop-node-common": "^1.0.6",
     "uuid": "^3.3.3"
