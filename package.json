@@ -11,10 +11,10 @@
     "test-lint": "eslint ./*.js ./lib/*.js"
   },
   "bin": {
-      "render": "./bin/render"
+    "render": "./bin/render"
   },
   "dependencies": {
-    "isolated-vm": "^2.0.1",
+    "isolated-vm": "^4.1.0",
     "mustache": "^3.0.2",
     "oop-node-common": "^1.0.6",
     "uuid": "^3.3.3"
