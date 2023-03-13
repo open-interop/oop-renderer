@@ -24,6 +24,11 @@ module.exports = (broker, config, logger) => {
                 log
             );
 
+            if (rendered.body && rendered.body.customFields) {
+                data.customFields = rendered.body.customFields;
+                delete rendered.body.customFields;
+            }
+
             data.tempr.rendered = rendered;
             data.tempr.console = output;
             data.tempr.error = null;
