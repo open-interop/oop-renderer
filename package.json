@@ -1,6 +1,6 @@
 {
   "name": "oop-renderer",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Renderer service for OpenInterop",
   "main": "app.js",
   "license": "AGPL-3.0",
