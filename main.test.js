@@ -1,6 +1,5 @@
-import test from "ava";
-
-var main = require("./main");
+const test = require("ava");
+const main = require("./main");
 
 const mockLogger = { info: () => {}, error: () => {} };
 

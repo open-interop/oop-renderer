@@ -29,6 +29,31 @@ module.exports = (broker, config, logger) => {
                 delete rendered.body.customFields;
             }
 
+            if (rendered.body && rendered.body.messages) {
+                data.messages = rendered.body.messages;
+                delete rendered.body.messages;
+
+                for (const newMessage of data.messages) {
+                    const newMessageUuid = uuid();
+
+                    newMessage.hostname = data.message.hostname;
+
+                    broker.publish(config.exchangeName, config.gatewayOutputQ, {
+                        uuid: newMessageUuid,
+                        parentUuid: data.uuid,
+                        message: newMessage
+                    });
+
+                    logger.info(
+                        `Requeue from ${data.uuid} in '${config.gatewayOutputQ}' as ${newMessageUuid}`
+                    );
+
+                    log(
+                        `Requeue from ${data.uuid} in '${config.gatewayOutputQ}' as ${newMessageUuid}`
+                    );
+                }
+            }
+
             data.tempr.rendered = rendered;
             data.tempr.console = output;
             data.tempr.error = null;

@@ -1,4 +1,4 @@
-FROM node:10.18.1
+FROM node:18.19.0
 
 LABEL maintainer="daniel.young@bluefrontier.co.uk"
 
