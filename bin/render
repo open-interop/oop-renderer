@@ -34,7 +34,7 @@ const processArgs = async () => {
         }
 
         console.error(
-            "Please provide an exmaple message and a render template.\n" +
+            "Please provide an example message and a render template.\n" +
             `Example usage: ${me} message.json template.json`
         );
 
@@ -56,7 +56,7 @@ const processArgs = async () => {
     if (mFlag > -1 || tFlag > -1 || lFlags.length) {
         if (!(mFlag > -1 && tFlag > -1)) {
             console.error(
-                "Please provide an exmaple message and a render template.\n" +
+                "Please provide an example message and a render template.\n" +
                 `Example usage: ${me} -m message.json -t template.json` + "\n" +
                 `Example usage: ${me} --message message.json --template template.json`
             );

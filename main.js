@@ -20,7 +20,7 @@ module.exports = (broker, config, logger) => {
             var rendered = await renderer(
                 data,
                 data.tempr.template,
-                data.layers,
+                data.tempr.layers,
                 log
             );
 
