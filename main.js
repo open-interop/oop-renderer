@@ -36,7 +36,9 @@ module.exports = (broker, config, logger) => {
                 for (const newMessage of data.messages) {
                     const newMessageUuid = uuid();
 
-                    newMessage.hostname = data.message.hostname;
+                    if (data.message) {
+                        newMessage.hostname = data.message.hostname;
+                    }
 
                     broker.publish(config.exchangeName, config.gatewayOutputQ, {
                         uuid: newMessageUuid,
